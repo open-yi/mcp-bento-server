@@ -15,7 +15,9 @@
     "bin",
     "lib",
     "assets",
-    "skill"
+    "skill",
+    "images",
+    "README.md"
   ],
   "keywords": [
     "mcp",
