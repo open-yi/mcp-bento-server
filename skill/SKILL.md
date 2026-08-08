@@ -104,7 +104,7 @@ still overrides when you want a specific jump. Combine `goto` + `patch` for
 
 | Task | Command |
 |---|---|
-| Open / create | `bento-mcp open <file.bento.html>` · `bento-mcp new --title "X" --out f.bento.html --template <name>
+| Open / create | `bento-mcp open <file.bento.html>` · `bento-mcp new --title "X" --out f.bento.html [--template <name>]  # default = blank slide
 
 Pick a template from `bento-mcp templates` based on the user's topic:
 dark (tech/dev) · light (business/client) · gradient (launch/keynote) ·

@@ -106,13 +106,13 @@ async function main() {
       break;
     }
     case 'new': {
-      let title = 'Untitled deck', file = null, template = 'dark';
+      let title = 'Untitled deck', file = null, template = 'blank';
       for (let i = 0; i < args.length; i++) {
         if (args[i] === '--title') title = args[++i];
         else if (args[i] === '--out') file = args[++i];
         else if (args[i] === '--template') template = args[++i];
       }
-      if (!file) err('usage: bento-mcp new --title "..." --out <file.bento.html> [--template dark|light|gradient|editorial|midnight]');
+      if (!file) err('usage: bento-mcp new --title "..." --out <file.bento.html> [--template blank|dark|light|gradient|editorial|midnight]');
       await ensureServer();
       out(await api('POST', '/api/new', { file, title, template }));
       await maybeOpenBrowser();
