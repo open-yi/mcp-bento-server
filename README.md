@@ -1,5 +1,7 @@
 # mcp-bento-server
 
+<img src="images/demo.gif" width="100%" alt="mcp-bento-server live building demo"/>
+
 **Local-first MCP server & CLI for authoring Bento decks (single-file PPT) with AI agents and live browser preview.**
 
 Bento — the [PowerPoint alternative that fits in a file](https://github.com/nyblnet/bento) — carries its own viewer, presenter and editor inside a single `.bento.html` document. This toolkit gives agents a programmatic way to drive it:
@@ -12,7 +14,6 @@ Bento — the [PowerPoint alternative that fits in a file](https://github.com/ny
 
 Zero runtime dependencies — Node 20+ built-ins only. Local-first: the file on disk is the document; nothing leaves your machine.
 
-![mcp-bento-server demo](images/demo.gif)
 
 ---
 
@@ -40,47 +41,46 @@ No `npm i` in a project yet? `npx -y mcp-bento-server <cmd>` works anywhere Node
 
 ## Example: building a deck with an agent
 
-**You:** *I need a pitch deck for our new analytics platform.*
+A simulated CLI session — the agent runs these commands, and every step updates the browser live (new slides auto-activate, text types itself, no flicker):
 
-**Agent:** *(browser auto-opens)* Let's pick a template and start.
+```text
+$ bento-mcp templates
+  dark       Deep charcoal + coral accent. Tech demos, developer talks.
+  light      Clean white + deep navy + blue accent. Client pitches, QBRs.
+  gradient   Deep base with violet→coral glow accents. Product launches.
+  editorial  Serif display type, big whitespace. Creative work, design talks.
+  midnight   Bento signature: deep navy ink + peach accent. General default.
 
-```bash
-bento-mcp templates          # light = business/client, dark = tech, ...
-bento-mcp new --title "Analytics Platform" --out pitch.bento.html --template light
+# (you) "make a pitch deck for our analytics platform"
+# (agent) business audience → light template; browser auto-opens
+$ bento-mcp new --title "Analytics Platform" --out pitch.bento.html --template light
+{ ok: true, title: "Analytics Platform", slides: 1 }
+
+# (agent) cover is ready — now the content page, built live
+$ bento-mcp add-slide '{"id":"s2","elements":[]}'
+{ ok: true, slides: 2 }                    # new page appears & activates
+
+$ bento-mcp patch '{"createElements":[{"slideId":"s2","element":{"id":"head","type":"text","x":96,"y":140,"w":800,"h":90,"html":"Real-time insights","fontSize":52,"fontWeight":800,"color":"#1A1D20"}}]}'
+{ ok: true, slides: 2 }                    # title lands on the new page
+
+$ bento-mcp patch '{"stream":true,"updateElements":[{"slideId":"s2","id":"body","set":{"html":"One pipeline, every metric, live."}}]}'
+{ ok: true, slides: 2 }                    # text types itself out word by word
+
+# (you) "change the title and add a comparison chart on page 3"
+$ bento-mcp patch '{"updateElements":[{"slideId":"s2","id":"head","set":{"html":"Insights in real time"}}]}'
+{ ok: true, slides: 2 }                    # browser jumps to page 2, edits in place
+
+$ bento-mcp patch '{"createElements":[{"slideId":"s3","element":{"id":"cmp","type":"chart","x":200,"y":220,"w":700,"h":340,"preset":"bar","option":{"xAxis":{"type":"category","data":["Us","Them"]},"yAxis":{"type":"value"},"series":[{"type":"bar","data":[980,310],"itemStyle":{"color":"#2563EB"},"barWidth":120}]}}}]}'
+{ ok: true, slides: 3 }                    # chart renders on page 3
+
+# (you) "walk me through it"
+$ bento-mcp present
+$ bento-mcp present --next                 # agent drives the slideshow
+$ bento-mcp present --exit
+
+$ bento-mcp save
+{ ok: true }                               # the file is the deliverable — send it
 ```
-
-**Agent:** Cover is ready. Adding a content slide — watch it build live.
-
-```bash
-bento-mcp add-slide '{"id":"s2","elements":[]}'
-bento-mcp patch '{"createElements":[{"slideId":"s2","element":{"id":"head","type":"text","x":96,"y":140,"w":800,"h":90,"html":"Real-time insights","fontSize":52,"fontWeight":800,"color":"#1A1D20"}}]}'
-bento-mcp patch '{"stream":true,"updateElements":[{"slideId":"s2","id":"body","set":{"html":"One pipeline, every metric, live."}}]}'
-```
-
-**You:** *Change the title, and add a comparison chart on page 3.*
-
-**Agent:** *(jumps to page 3 automatically, edits in place, no flicker)*
-
-```bash
-bento-mcp patch '{"updateElements":[{"slideId":"s2","id":"head","set":{"html":"Insights in real time"}}]}'
-bento-mcp patch '{"createElements":[{"slideId":"s3","element":{"id":"cmp","type":"chart","x":200,"y":220,"w":700,"h":340,"preset":"bar","option":{"xAxis":{"type":"category","data":["Us","Them"]},"yAxis":{"type":"value"},"series":[{"type":"bar","data":[980,310],"itemStyle":{"color":"#2563EB"},"barWidth":120}]}}}]}'
-```
-
-**Agent:** Want me to present it?
-
-**You:** *Sure, walk me through it.*
-
-```bash
-bento-mcp present            # in-tab slideshow
-bento-mcp present --next     # next slide
-bento-mcp present --exit     # back to the editor
-bento-mcp save               # the file is the deliverable
-```
-
-> Every step above updates the browser **live**: the agent works, you watch.
-> New slides appear and auto-activate; text types itself; edits stay on the
-> current page with zero flicker. The `.bento.html` you save is a self-contained
-> deck — send it to anyone, they just open it.
 
 ## CLI reference
 
