@@ -188,6 +188,13 @@ async function main() {
       out(await api('POST', '/api/patch', { ops: { duplicateSlide: { id: args[0] } } }));
       break;
     }
+    case 'present': {
+      // default fullscreen; --tab presents inside the browser tab
+      const fullscreen = !args.includes('--tab');
+      await ensureServer();
+      out(await api('POST', '/api/present', { fullscreen }));
+      break;
+    }
     case 'goto': {
       const id = args[0];
       if (!id) err('usage: bento-mcp goto <slide-id>');
