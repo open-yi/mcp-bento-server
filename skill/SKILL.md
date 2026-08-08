@@ -115,7 +115,7 @@ editorial (creative) · midnight (general default). Ask the user if unsure.` —
 | Save | `bento-mcp save` (writes the doc into the file) |
 | Quality | `bento-mcp validate` · `bento-mcp measure '{"html":"...","w":600,"fontSize":28}'` |
 | JSON round-trip | `bento-mcp export-json --out doc.json` · `bento-mcp import-json doc.json` |
-| Present | `bento-mcp present` (fullscreen) · `bento-mcp present --tab` (in-tab) |
+| Present | `bento-mcp present` (in-tab; browsers block programmatic fullscreen) · `present --fullscreen` (best-effort) · `present --next` / `--prev` (drive the show) |
 | Server | `bento-mcp status` · `bento-mcp start` · `bento-mcp stop` |
 
 ## Patch ops (the core editing surface)

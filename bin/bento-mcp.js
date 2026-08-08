@@ -189,8 +189,11 @@ async function main() {
       break;
     }
     case 'present': {
-      // default fullscreen; --tab presents inside the browser tab
-      const fullscreen = !args.includes('--tab');
+      // browser blocks programmatic OS-fullscreen (needs a user gesture), so
+      // default to in-tab; --fullscreen still asks (falls back to in-tab).
+      if (args.includes('--next')) { await ensureServer(); out(await api('POST', '/api/present-step', { dir: 1 })); break; }
+      if (args.includes('--prev')) { await ensureServer(); out(await api('POST', '/api/present-step', { dir: -1 })); break; }
+      const fullscreen = args.includes('--fullscreen');
       await ensureServer();
       out(await api('POST', '/api/present', { fullscreen }));
       break;
