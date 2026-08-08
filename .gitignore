@@ -1,3 +1,6 @@
 node_modules/
 *.log
 .DS_Store
+
+# user's working decks, not part of this repo
+/*.bento.html
