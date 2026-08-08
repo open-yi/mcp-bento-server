@@ -1,6 +1,6 @@
 {
   "name": "mcp-bento-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local-first MCP server & CLI for authoring Bento decks (single-file PPT) with AI agents and live browser preview.",
   "license": "MIT",
   "type": "commonjs",
