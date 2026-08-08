@@ -79,6 +79,13 @@ The user's browser at http://127.0.0.1:3900/ is the live preview. The browser
 tab also runs `window.bento.validate()` and posts the report back, so
 `bento-mcp validate` works even for models without vision.
 
+**Slides inherit the theme background automatically** (new slides never
+render black in the presentation). When adding a slide by hand, set its
+`background` to match the theme if you want something custom.
+
+**When you finish building, jump back to slide 1** (`bento-mcp goto s1`) so the
+user reviews the deck from the cover.
+
 ## Editing a specific slide ("go there and change it")
 
 ```
