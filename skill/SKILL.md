@@ -22,12 +22,29 @@ Node 20+ is available (first run downloads the package).
 
 ## The loop that matters
 
+**Always open the deck FIRST** — `open` (or `new`) auto-opens the browser tab,
+so the user can watch the deck being built live:
+
 ```
-1. npx -y mcp-bento-server open <file>         # or: npx -y mcp-bento-server new --title X --out <file>
-2. npx -y mcp-bento-server patch '{...}'       # edit document JSON
-3. npx -y mcp-bento-server validate            # programmatic self-check (needs browser tab)
-4. ask the user what they see    # they watch the live preview in the browser
-5. repeat 2–4 until good
+1. npx -y mcp-bento-server open <file>      # browser auto-opens → user can see
+2. npx -y mcp-bento-server add-slide '...'  # build ONE slide at a time
+3. ask the user what they see               # the browser already updated
+4. repeat — one slide per call, so every step is visible
+5. npx -y mcp-bento-server validate         # programmatic self-check
+```
+
+**Build incrementally, never all at once.** One slide per `add-slide` call
+(or a small `patch`) keeps the browser showing each step — the user watches
+the deck grow. Do NOT build the whole deck in one big JSON dump: big payloads
+hit command-line length limits and hide the process from the user.
+
+**Large JSON → use a file.** For big ops or full imports, write the JSON to a
+file and pass it:
+
+```bash
+npx -y mcp-bento-server patch @ops.json
+npx -y mcp-bento-server patch ops.json     # file path works too
+npx -y mcp-bento-server import-json deck.json
 ```
 
 The user's browser at http://127.0.0.1:3900/ is the live preview. The browser
@@ -38,9 +55,9 @@ tab also runs `window.bento.validate()` and posts the report back, so
 
 | Task | Command |
 |---|---|
-| Open / create | `npx -y mcp-bento-server open <file.bento.html>` · `npx -y mcp-bento-server new --title "X" --out f.bento.html` |
+| Open / create | `npx -y mcp-bento-server open <file.bento.html>` · `npx -y mcp-bento-server new --title "X" --out f.bento.html` — both auto-open the browser |
 | Read | `npx -y mcp-bento-server read` · `npx -y mcp-bento-server slides` · `npx -y mcp-bento-server get <slide-id>` · `npx -y mcp-bento-server describe` |
-| Edit | `npx -y mcp-bento-server patch '<ops json>'` · `npx -y mcp-bento-server add-slide '<slide json>'` · `npx -y mcp-bento-server update-slide <id> '<set json>'` · `npx -y mcp-bento-server delete-slide <id>` · `npx -y mcp-bento-server duplicate-slide <id>` |
+| Edit | `npx -y mcp-bento-server patch '<ops json>'` · `patch @ops.json` · `add-slide '<slide json>'` · `update-slide <id> '<set json>'` · `delete-slide <id>` · `duplicate-slide <id>` |
 | Style | `npx -y mcp-bento-server set-theme '{"background":"#101418"}'` · `npx -y mcp-bento-server set-title "..."` |
 | Save | `npx -y mcp-bento-server save` (writes the doc into the file) |
 | Quality | `npx -y mcp-bento-server validate` · `npx -y mcp-bento-server measure '{"html":"...","w":600,"fontSize":28}'` |

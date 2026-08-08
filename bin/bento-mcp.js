@@ -145,15 +145,21 @@ async function main() {
       break;
     }
     case 'patch': {
-      const json = args[0];
-      if (!json) err('usage: bento-mcp patch \'{"createElements":[...]}\' (or - for stdin)');
-      const ops = json === '-' ? JSON.parse(fs.readFileSync(0, 'utf8')) : parseJsonArg(json, 'patch');
+      const arg = args[0];
+      if (!arg) err('usage: bento-mcp patch \'<json>\' | <file.json> | @file.json | - (stdin)');
+      let ops;
+      if (arg === '-') ops = JSON.parse(fs.readFileSync(0, 'utf8'));
+      else if (arg.startsWith('@')) ops = JSON.parse(fs.readFileSync(arg.slice(1), 'utf8'));
+      else if (fs.existsSync(arg)) ops = JSON.parse(fs.readFileSync(arg, 'utf8'));
+      else ops = parseJsonArg(arg, 'patch');
       await ensureServer();
       out(await api('POST', '/api/patch', { ops }));
       break;
     }
     case 'add-slide': {
-      const slide = parseJsonArg(args[0], 'slide');
+      const arg = args[0];
+      if (!arg) err('usage: bento-mcp add-slide \'<slide json>\' | <file.json>');
+      const slide = fs.existsSync(arg) ? JSON.parse(fs.readFileSync(arg, 'utf8')) : parseJsonArg(arg, 'slide');
       await ensureServer();
       out(await api('POST', '/api/patch', { ops: { addSlides: [slide] } }));
       break;
