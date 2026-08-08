@@ -86,6 +86,10 @@ render black in the presentation). When adding a slide by hand, set its
 **When you finish building, jump back to slide 1** (`bento-mcp goto s1`) so the
 user reviews the deck from the cover.
 
+**User edits in the browser sync back to the server automatically** — if the
+user drags/retypes while you work, `read`/`patch` still see their latest state,
+so you never build on stale data.
+
 ## Editing a specific slide ("go there and change it")
 
 ```
