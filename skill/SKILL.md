@@ -39,9 +39,10 @@ changes via the custom build's `updateDoc` (single-page render): no reload,
 no flicker, current slide preserved. You never call `loadDoc` yourself; just
 use `patch` / `add-slide` and the browser updates live.
 
-**ONE element per call. ONE slide per call.** The server rejects batch
-`createElements`/`addSlides` (it is the live-building contract) — send a single
-element, wait, repeat. The user watches each step land in real time.
+**Batch is fine — the server reveals it element-by-element (~200ms each).**
+You may send several `createElements` in one call; the user still sees the
+page grow one piece at a time, and it stays fast (no per-call startup cost).
+For extra-visible pacing use `stream:true` on text updates for a typing feel.
 
 **Build incrementally, never all at once** — one slide per `add-slide` call
 (each new slide is auto-activated in the browser), then add its content piece
