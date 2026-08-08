@@ -34,6 +34,11 @@ so the user can watch the deck being built live:
 5. bento-mcp validate         # programmatic self-check
 ```
 
+**Every edit is data-driven and rendered in place** — the bridge applies
+changes via the custom build's `updateDoc` (single-page render): no reload,
+no flicker, current slide preserved. You never call `loadDoc` yourself; just
+use `patch` / `add-slide` and the browser updates live.
+
 **Build incrementally, never all at once** — one slide per `add-slide` call
 (each new slide is auto-activated in the browser), then add its content piece
 by piece so the user sees it being typed:
@@ -68,6 +73,18 @@ bento-mcp import-json deck.json
 The user's browser at http://127.0.0.1:3900/ is the live preview. The browser
 tab also runs `window.bento.validate()` and posts the report back, so
 `bento-mcp validate` works even for models without vision.
+
+## Editing a specific slide ("go there and change it")
+
+```
+bento-mcp slides                          # find slide ids
+bento-mcp goto <slide-id>                 # jump the browser to that slide
+bento-mcp patch '{"updateElements":[{"slideId":"<id>","id":"<el-id>","set":{...}}], "activeSlideId":"<id>"}'
+                                          # change it — browser is already there
+```
+
+Every `patch` can carry `activeSlideId` — the browser jumps there first, then
+the edit renders in place. Combine `goto` + `patch` for "change page 3's title".
 
 ## CLI quick reference
 

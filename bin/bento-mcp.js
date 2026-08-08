@@ -182,6 +182,13 @@ async function main() {
       out(await api('POST', '/api/patch', { ops: { duplicateSlide: { id: args[0] } } }));
       break;
     }
+    case 'goto': {
+      const id = args[0];
+      if (!id) err('usage: bento-mcp goto <slide-id>');
+      await ensureServer();
+      out(await api('POST', '/api/patch', { ops: { activeSlideId: id } }));
+      break;
+    }
     case 'set-theme': {
       const set = parseJsonArg(args[0], 'theme');
       await ensureServer();
