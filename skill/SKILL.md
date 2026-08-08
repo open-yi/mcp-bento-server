@@ -33,10 +33,25 @@ so the user can watch the deck being built live:
 5. npx -y mcp-bento-server validate         # programmatic self-check
 ```
 
-**Build incrementally, never all at once.** One slide per `add-slide` call
-(or a small `patch`) keeps the browser showing each step — the user watches
-the deck grow. Do NOT build the whole deck in one big JSON dump: big payloads
-hit command-line length limits and hide the process from the user.
+**Build incrementally, never all at once** — one slide per `add-slide` call
+(each new slide is auto-activated in the browser), then add its content piece
+by piece so the user sees it being typed:
+
+```
+# 1. create the slide shell (auto-activates in the browser)
+npx -y mcp-bento-server add-slide '{"id":"s4","transition":"morph","elements":[]}'
+
+# 2. fill it element by element — each call is visible instantly
+npx -y mcp-bento-server patch '{"createElements":[{"slideId":"s4","element":{...title...}}]}'
+npx -y mcp-bento-server patch '{"createElements":[{"slideId":"s4","element":{...chart...}}]}'
+
+# 3. grow long text in steps for a typing feel
+npx -y mcp-bento-server patch '{"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up"}}]}'
+npx -y mcp-bento-server patch '{"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up 42%"}}]}'
+```
+
+Do NOT build the whole deck in one big JSON dump: big payloads hit
+command-line length limits and hide the process from the user.
 
 **Large JSON → use a file.** For big ops or full imports, write the JSON to a
 file and pass it:

@@ -161,7 +161,7 @@ async function main() {
       if (!arg) err('usage: bento-mcp add-slide \'<slide json>\' | <file.json>');
       const slide = fs.existsSync(arg) ? JSON.parse(fs.readFileSync(arg, 'utf8')) : parseJsonArg(arg, 'slide');
       await ensureServer();
-      out(await api('POST', '/api/patch', { ops: { addSlides: [slide] } }));
+      out(await api('POST', '/api/patch', { ops: { addSlides: [slide], activeSlideId: slide.id } }));
       break;
     }
     case 'update-slide': {
