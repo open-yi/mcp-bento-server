@@ -88,8 +88,10 @@ bento-mcp patch '{"updateElements":[{"slideId":"<id>","id":"<el-id>","set":{...}
                                           # change it — browser is already there
 ```
 
-Every `patch` can carry `activeSlideId` — the browser jumps there first, then
-the edit renders in place. Combine `goto` + `patch` for "change page 3's title".
+The browser auto-jumps to whichever slide an edit touches (from the patch's
+slideId) — editing page 3 shows page 3, no manual goto needed. `activeSlideId`
+still overrides when you want a specific jump. Combine `goto` + `patch` for
+"change page 3's title".
 
 ## CLI quick reference
 
