@@ -114,6 +114,8 @@ editorial (creative) · midnight (general default). Ask the user if unsure.` —
 | Style | `bento-mcp set-theme '{"background":"#101418"}'` · `bento-mcp set-title "..."` |
 | Save | `bento-mcp save` (writes the doc into the file) |
 | Quality | `bento-mcp validate` · `bento-mcp measure '{"html":"...","w":600,"fontSize":28}'` |
+| See the render | `bento-mcp view` — text snapshot of the current slide's REAL layout (positions, sizes, styles, overflow/overlap warnings) |
+
 | JSON round-trip | `bento-mcp export-json --out doc.json` · `bento-mcp import-json doc.json` |
 | Present | `bento-mcp present` (in-tab) · `present --next` / `--prev` (navigate) · `present --exit` (leave show) · `--fullscreen` (best-effort) |
 | Server | `bento-mcp status` · `bento-mcp start` · `bento-mcp stop` |
@@ -157,6 +159,11 @@ editorial (creative) · midnight (general default). Ask the user if unsure.` —
 - **Layout guardrails**: canvas 1280×720, keep 96px side margins (content band 1088px wide: 2 col → 528px @ x=96/656, 3 col → 340px @ x=96/470/844, 4 col → 254px @ x=96/374/652/930).
 - **`size` and `theme` (incl. `fontFamily`) are required** — the app will not boot without them.
 - Never invent property names — unknown keys are ignored silently.
+
+**Check the render with `bento-mcp view` after every batch** — it reports the
+real rendered layout (element positions, sizes, fonts, overflow/overlap
+warnings). Fix what it flags, then view again. This replaces eyes for layout
+correctness; the user still judges aesthetics.
 
 ## Quality workflow (no vision required)
 
