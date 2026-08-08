@@ -6,18 +6,18 @@
 
 Bento — the [PowerPoint alternative that fits in a file](https://github.com/nyblnet/bento) — carries its own viewer, presenter and editor inside a single `.bento.html` document. This toolkit gives agents a programmatic way to drive it:
 
-- **CLI** (`bento-mcp`): open, read, patch, add/duplicate/delete slides, set themes, validate — anything an agent needs to build a deck.
-- **Live browser preview**: edits are pushed over WebSocket to your browser tab, which reloads automatically. You watch the result as the agent works.
-- **Programmatic self-check**: `validate` and `measure` run inside the browser and post structured reports back — so even a non-vision model can catch overflow, broken links, duplicate ids and chart config errors without screenshots.
-- **MCP server**: one line of config and Claude Code / opencode can call `bento_*` tools natively.
-- **One skill, three harnesses**: the bundled `SKILL.md` (Agent Skills standard) installs into Claude Code, opencode and pi with a single command.
+- **⌨️ CLI** (`bento-mcp`): open, read, patch, add/duplicate/delete slides, set themes, validate — anything an agent needs to build a deck.
+- **🖥️ Live browser preview**: edits are pushed over WebSocket to your browser tab, which reloads automatically. You watch the result as the agent works.
+- **✅ Programmatic self-check**: `validate` and `measure` run inside the browser and post structured reports back — so even a non-vision model can catch overflow, broken links, duplicate ids and chart config errors without screenshots.
+- **🔌 MCP server**: one line of config and Claude Code / opencode can call `bento_*` tools natively.
+- **🧩 One skill, three harnesses**: the bundled `SKILL.md` (Agent Skills standard) installs into Claude Code, opencode and pi with a single command.
 
 Zero runtime dependencies — Node 20+ built-ins only. Local-first: the file on disk is the document; nothing leaves your machine.
 
 
 ---
 
-## Quick start
+## 🚀 Quick start
 
 ```bash
 npm i -g mcp-bento-server
@@ -39,7 +39,27 @@ bento-mcp save
 
 No `npm i` in a project yet? `npx -y mcp-bento-server <cmd>` works anywhere Node 20+ exists (slower per call — install globally for a responsive live-build).
 
-## Example: building a deck with an agent
+## 🔌 MCP configuration
+
+Claude Code (`.mcp.json`) or opencode (`opencode.json`):
+
+```json
+{
+  "mcp": {
+    "bento": {
+      "type": "local",
+      "command": ["bento-mcp", "mcp"]
+    }
+  }
+}
+```
+
+Tools: `bento_open_deck`, `bento_new_deck`, `bento_save_deck`, `bento_read_doc`,
+`bento_list_slides`, `bento_get_slide`, `bento_describe`, `bento_patch_elements`,
+`bento_add_slide`, `bento_update_slide`, `bento_delete_slide`, `bento_duplicate_slide`,
+`bento_set_theme`, `bento_validate`, `bento_measure`, `bento_status`.
+
+## 🤖 Example: building a deck with an agent
 
 A simulated CLI session — the agent runs these commands, and every step updates the browser live (new slides auto-activate, text types itself, no flicker):
 
@@ -51,12 +71,12 @@ $ bento-mcp templates
   editorial  Serif display type, big whitespace. Creative work, design talks.
   midnight   Bento signature: deep navy ink + peach accent. General default.
 
-# (you) "make a pitch deck for our analytics platform"
-# (agent) business audience → light template; browser auto-opens
+# 👤 (you) "make a pitch deck for our analytics platform"
+# 🤖 (agent) business audience → light template; browser auto-opens
 $ bento-mcp new --title "Analytics Platform" --out pitch.bento.html --template light
 { ok: true, title: "Analytics Platform", slides: 1 }
 
-# (agent) cover is ready — now the content page, built live
+# 🤖 (agent) cover is ready — now the content page, built live
 $ bento-mcp add-slide '{"id":"s2","elements":[]}'
 { ok: true, slides: 2 }                    # new page appears & activates
 
@@ -66,14 +86,14 @@ $ bento-mcp patch '{"createElements":[{"slideId":"s2","element":{"id":"head","ty
 $ bento-mcp patch '{"stream":true,"updateElements":[{"slideId":"s2","id":"body","set":{"html":"One pipeline, every metric, live."}}]}'
 { ok: true, slides: 2 }                    # text types itself out word by word
 
-# (you) "change the title and add a comparison chart on page 3"
+# 👤 (you) "change the title and add a comparison chart on page 3"
 $ bento-mcp patch '{"updateElements":[{"slideId":"s2","id":"head","set":{"html":"Insights in real time"}}]}'
 { ok: true, slides: 2 }                    # browser jumps to page 2, edits in place
 
 $ bento-mcp patch '{"createElements":[{"slideId":"s3","element":{"id":"cmp","type":"chart","x":200,"y":220,"w":700,"h":340,"preset":"bar","option":{"xAxis":{"type":"category","data":["Us","Them"]},"yAxis":{"type":"value"},"series":[{"type":"bar","data":[980,310],"itemStyle":{"color":"#2563EB"},"barWidth":120}]}}}]}'
 { ok: true, slides: 3 }                    # chart renders on page 3
 
-# (you) "walk me through it"
+# 👤 (you) "walk me through it"
 $ bento-mcp present
 $ bento-mcp present --next                 # agent drives the slideshow
 $ bento-mcp present --exit
@@ -82,7 +102,7 @@ $ bento-mcp save
 { ok: true }                               # the file is the deliverable — send it
 ```
 
-## CLI reference
+## 📖 CLI reference
 
 ```
 bento-mcp serve [--port N]     start the server in the foreground
@@ -108,27 +128,7 @@ bento-mcp install-skill        install the skill into Claude Code, opencode and 
 bento-mcp mcp                  run as an MCP stdio server
 ```
 
-## MCP configuration
-
-Claude Code (`.mcp.json`) or opencode (`opencode.json`):
-
-```json
-{
-  "mcp": {
-    "bento": {
-      "type": "local",
-      "command": ["bento-mcp", "mcp"]
-    }
-  }
-}
-```
-
-Tools: `bento_open_deck`, `bento_new_deck`, `bento_save_deck`, `bento_read_doc`,
-`bento_list_slides`, `bento_get_slide`, `bento_describe`, `bento_patch_elements`,
-`bento_add_slide`, `bento_update_slide`, `bento_delete_slide`, `bento_duplicate_slide`,
-`bento_set_theme`, `bento_validate`, `bento_measure`, `bento_status`.
-
-## Install the skill everywhere
+## 🧩 Install the skill everywhere
 
 ```bash
 bento-mcp install-skill
@@ -138,7 +138,7 @@ Writes `SKILL.md` to `~/.claude/skills/bento-slides/`,
 `~/.config/opencode/skills/bento-slides/` and `~/.agents/skills/bento-slides/`
 (pi reads these directly; Claude Code and opencode use the Agent Skills standard).
 
-## How it works
+## 🔧 How it works
 
 ```
         your browser (the human's live preview)
@@ -162,7 +162,7 @@ Writes `SKILL.md` to `~/.claude/skills/bento-slides/`,
 - `validate` / `measure` run in the browser frontend and post results back,
   which is how a non-vision model verifies layout without screenshots.
 
-## License
+## 📄 License
 
 MIT — our code is MIT. The bundled Bento runtime (`Bento_Slides.bento.html`)
 is MIT © 2026 The Bento authors; its embedded components (reveal.js, Moveable,
