@@ -154,6 +154,7 @@ async function main() {
       else ops = parseJsonArg(arg, 'patch');
       await ensureServer();
       out(await api('POST', '/api/patch', { ops }));
+      await maybeOpenBrowser();
       break;
     }
     case 'add-slide': {
@@ -162,6 +163,7 @@ async function main() {
       const slide = fs.existsSync(arg) ? JSON.parse(fs.readFileSync(arg, 'utf8')) : parseJsonArg(arg, 'slide');
       await ensureServer();
       out(await api('POST', '/api/patch', { ops: { addSlides: [slide], activeSlideId: slide.id } }));
+      await maybeOpenBrowser();
       break;
     }
     case 'update-slide': {
@@ -210,6 +212,7 @@ async function main() {
       await ensureServer();
       const doc = JSON.parse(fs.readFileSync(file, 'utf8'));
       out(await api('POST', '/api/patch', { ops: { setDoc: doc } }));
+      await maybeOpenBrowser();
       break;
     }
     case 'validate': {
