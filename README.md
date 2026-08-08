@@ -112,6 +112,7 @@ bento-mcp new --title T --out F   create a new deck
 bento-mcp read                 dump the document JSON
 bento-mcp slides               list slides (id, elements, transition)
 bento-mcp get <slide-id>       dump one slide
+bento-mcp goto <slide-id>      jump the browser to a slide
 bento-mcp describe             plain-text summary of the whole deck
 bento-mcp patch '<ops json>'   apply an ops patch (create/update/delete)
 bento-mcp add-slide '<json>'   add a slide
@@ -123,7 +124,10 @@ bento-mcp set-title "..."      set the deck title
 bento-mcp save                 write the doc back into the file
 bento-mcp export-json [--out F] / import-json <file>
 bento-mcp validate             programmatic self-check (browser tab required)
+bento-mcp view                  text snapshot of the current slide's REAL rendered layout
 bento-mcp measure '<spec json>'   size text before placing it (browser tab required)
+bento-mcp present [--next|--prev|--exit]   start / drive / leave the slideshow
+bento-mcp templates            list built-in deck templates
 bento-mcp install-skill        install the skill into Claude Code, opencode and pi
 bento-mcp mcp                  run as an MCP stdio server
 ```

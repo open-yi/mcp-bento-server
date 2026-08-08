@@ -118,7 +118,8 @@ editorial (creative) · midnight (general default). Ask the user if unsure.` —
 
 | JSON round-trip | `bento-mcp export-json --out doc.json` · `bento-mcp import-json doc.json` |
 | Present | `bento-mcp present` (in-tab) · `present --next` / `--prev` (navigate) · `present --exit` (leave show) · `--fullscreen` (best-effort) |
-| Server | `bento-mcp status` · `bento-mcp start` · `bento-mcp stop` |
+| Server | `bento-mcp serve` (foreground) · `bento-mcp start` / `stop` / `status` |
+| Install | `bento-mcp install-skill` (writes SKILL.md into all three harnesses) · `bento-mcp mcp` (MCP stdio mode) |
 
 ## Patch ops (the core editing surface)
 
