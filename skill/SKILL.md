@@ -18,7 +18,8 @@ npm i -g mcp-bento-server      # one-time install
 ```
 
 If it is not installed yet, `npx -y mcp-bento-server <cmd>` works anywhere
-Node 20+ is available (first run downloads the package).
+Node 20+ is available, but npx adds ~6s of startup per call — install globally
+once (`npm i -g mcp-bento-server`) for a responsive live-building experience.
 
 ## The loop that matters
 
@@ -26,11 +27,11 @@ Node 20+ is available (first run downloads the package).
 so the user can watch the deck being built live:
 
 ```
-1. npx -y mcp-bento-server open <file>      # browser auto-opens → user can see
-2. npx -y mcp-bento-server add-slide '...'  # build ONE slide at a time
+1. bento-mcp open <file>      # browser auto-opens → user can see
+2. bento-mcp add-slide '...'  # build ONE slide at a time
 3. ask the user what they see               # the browser already updated
 4. repeat — one slide per call, so every step is visible
-5. npx -y mcp-bento-server validate         # programmatic self-check
+5. bento-mcp validate         # programmatic self-check
 ```
 
 **Build incrementally, never all at once** — one slide per `add-slide` call
@@ -39,15 +40,17 @@ by piece so the user sees it being typed:
 
 ```
 # 1. create the slide shell (auto-activates in the browser)
-npx -y mcp-bento-server add-slide '{"id":"s4","transition":"morph","elements":[]}'
+bento-mcp add-slide '{"id":"s4","transition":"morph","elements":[]}'
 
 # 2. fill it element by element — each call is visible instantly
-npx -y mcp-bento-server patch '{"createElements":[{"slideId":"s4","element":{...title...}}]}'
-npx -y mcp-bento-server patch '{"createElements":[{"slideId":"s4","element":{...chart...}}]}'
+bento-mcp patch '{"createElements":[{"slideId":"s4","element":{...title...}}]}'
+bento-mcp patch '{"createElements":[{"slideId":"s4","element":{...chart...}}]}'
 
-# 3. grow long text in steps for a typing feel
-npx -y mcp-bento-server patch '{"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up"}}]}'
-npx -y mcp-bento-server patch '{"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up 42%"}}]}'
+# 3. typing effect: pass stream:true — the server reveals the text word by
+#    word (data-driven, no flicker) instead of one abrupt replace
+bento-mcp patch '{"stream":true,"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up 42%"}}]}'
+bento-mcp patch '{"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up"}}]}'
+bento-mcp patch '{"updateElements":[{"slideId":"s4","id":"t1","set":{"html":"Revenue up 42%"}}]}'
 ```
 
 Do NOT build the whole deck in one big JSON dump: big payloads hit
@@ -57,27 +60,27 @@ command-line length limits and hide the process from the user.
 file and pass it:
 
 ```bash
-npx -y mcp-bento-server patch @ops.json
-npx -y mcp-bento-server patch ops.json     # file path works too
-npx -y mcp-bento-server import-json deck.json
+bento-mcp patch @ops.json
+bento-mcp patch ops.json     # file path works too
+bento-mcp import-json deck.json
 ```
 
 The user's browser at http://127.0.0.1:3900/ is the live preview. The browser
 tab also runs `window.bento.validate()` and posts the report back, so
-`npx -y mcp-bento-server validate` works even for models without vision.
+`bento-mcp validate` works even for models without vision.
 
 ## CLI quick reference
 
 | Task | Command |
 |---|---|
-| Open / create | `npx -y mcp-bento-server open <file.bento.html>` · `npx -y mcp-bento-server new --title "X" --out f.bento.html` — both auto-open the browser |
-| Read | `npx -y mcp-bento-server read` · `npx -y mcp-bento-server slides` · `npx -y mcp-bento-server get <slide-id>` · `npx -y mcp-bento-server describe` |
-| Edit | `npx -y mcp-bento-server patch '<ops json>'` · `patch @ops.json` · `add-slide '<slide json>'` · `update-slide <id> '<set json>'` · `delete-slide <id>` · `duplicate-slide <id>` |
-| Style | `npx -y mcp-bento-server set-theme '{"background":"#101418"}'` · `npx -y mcp-bento-server set-title "..."` |
-| Save | `npx -y mcp-bento-server save` (writes the doc into the file) |
-| Quality | `npx -y mcp-bento-server validate` · `npx -y mcp-bento-server measure '{"html":"...","w":600,"fontSize":28}'` |
-| JSON round-trip | `npx -y mcp-bento-server export-json --out doc.json` · `npx -y mcp-bento-server import-json doc.json` |
-| Server | `npx -y mcp-bento-server status` · `npx -y mcp-bento-server start` · `npx -y mcp-bento-server stop` |
+| Open / create | `bento-mcp open <file.bento.html>` · `bento-mcp new --title "X" --out f.bento.html` — both auto-open the browser |
+| Read | `bento-mcp read` · `bento-mcp slides` · `bento-mcp get <slide-id>` · `bento-mcp describe` |
+| Edit | `bento-mcp patch '<ops json>'` · `patch @ops.json` · `add-slide '<slide json>'` · `update-slide <id> '<set json>'` · `delete-slide <id>` · `duplicate-slide <id>` |
+| Style | `bento-mcp set-theme '{"background":"#101418"}'` · `bento-mcp set-title "..."` |
+| Save | `bento-mcp save` (writes the doc into the file) |
+| Quality | `bento-mcp validate` · `bento-mcp measure '{"html":"...","w":600,"fontSize":28}'` |
+| JSON round-trip | `bento-mcp export-json --out doc.json` · `bento-mcp import-json doc.json` |
+| Server | `bento-mcp status` · `bento-mcp start` · `bento-mcp stop` |
 
 ## Patch ops (the core editing surface)
 
@@ -121,10 +124,10 @@ tab also runs `window.bento.validate()` and posts the report back, so
 
 ## Quality workflow (no vision required)
 
-1. `npx -y mcp-bento-server validate` — official self-check: text overflow, off-canvas
+1. `bento-mcp validate` — official self-check: text overflow, off-canvas
    elements, broken links, duplicate ids, morph collisions, chart config
    errors. Filter `findings` for `severity: "error"` first.
-2. `npx -y mcp-bento-server measure '{"html":"...","w":600,"fontSize":28}'` — size text
+2. `bento-mcp measure '{"html":"...","w":600,"fontSize":28}'` — size text
    BEFORE placing it so it never overflows.
 3. Ask the user about aesthetics — they see the live preview.
 
