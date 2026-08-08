@@ -23,29 +23,29 @@ Node 20+ is available (first run downloads the package).
 ## The loop that matters
 
 ```
-1. bento-mcp open <file>         # or: bento-mcp new --title X --out <file>
-2. bento-mcp patch '{...}'       # edit document JSON
-3. bento-mcp validate            # programmatic self-check (needs browser tab)
+1. npx -y mcp-bento-server open <file>         # or: npx -y mcp-bento-server new --title X --out <file>
+2. npx -y mcp-bento-server patch '{...}'       # edit document JSON
+3. npx -y mcp-bento-server validate            # programmatic self-check (needs browser tab)
 4. ask the user what they see    # they watch the live preview in the browser
 5. repeat 2–4 until good
 ```
 
 The user's browser at http://127.0.0.1:3900/ is the live preview. The browser
 tab also runs `window.bento.validate()` and posts the report back, so
-`bento-mcp validate` works even for models without vision.
+`npx -y mcp-bento-server validate` works even for models without vision.
 
 ## CLI quick reference
 
 | Task | Command |
 |---|---|
-| Open / create | `bento-mcp open <file.bento.html>` · `bento-mcp new --title "X" --out f.bento.html` |
-| Read | `bento-mcp read` · `bento-mcp slides` · `bento-mcp get <slide-id>` · `bento-mcp describe` |
-| Edit | `bento-mcp patch '<ops json>'` · `bento-mcp add-slide '<slide json>'` · `bento-mcp update-slide <id> '<set json>'` · `bento-mcp delete-slide <id>` · `bento-mcp duplicate-slide <id>` |
-| Style | `bento-mcp set-theme '{"background":"#101418"}'` · `bento-mcp set-title "..."` |
-| Save | `bento-mcp save` (writes the doc into the file) |
-| Quality | `bento-mcp validate` · `bento-mcp measure '{"html":"...","w":600,"fontSize":28}'` |
-| JSON round-trip | `bento-mcp export-json --out doc.json` · `bento-mcp import-json doc.json` |
-| Server | `bento-mcp status` · `bento-mcp start` · `bento-mcp stop` |
+| Open / create | `npx -y mcp-bento-server open <file.bento.html>` · `npx -y mcp-bento-server new --title "X" --out f.bento.html` |
+| Read | `npx -y mcp-bento-server read` · `npx -y mcp-bento-server slides` · `npx -y mcp-bento-server get <slide-id>` · `npx -y mcp-bento-server describe` |
+| Edit | `npx -y mcp-bento-server patch '<ops json>'` · `npx -y mcp-bento-server add-slide '<slide json>'` · `npx -y mcp-bento-server update-slide <id> '<set json>'` · `npx -y mcp-bento-server delete-slide <id>` · `npx -y mcp-bento-server duplicate-slide <id>` |
+| Style | `npx -y mcp-bento-server set-theme '{"background":"#101418"}'` · `npx -y mcp-bento-server set-title "..."` |
+| Save | `npx -y mcp-bento-server save` (writes the doc into the file) |
+| Quality | `npx -y mcp-bento-server validate` · `npx -y mcp-bento-server measure '{"html":"...","w":600,"fontSize":28}'` |
+| JSON round-trip | `npx -y mcp-bento-server export-json --out doc.json` · `npx -y mcp-bento-server import-json doc.json` |
+| Server | `npx -y mcp-bento-server status` · `npx -y mcp-bento-server start` · `npx -y mcp-bento-server stop` |
 
 ## Patch ops (the core editing surface)
 
@@ -89,10 +89,10 @@ tab also runs `window.bento.validate()` and posts the report back, so
 
 ## Quality workflow (no vision required)
 
-1. `bento-mcp validate` — official self-check: text overflow, off-canvas
+1. `npx -y mcp-bento-server validate` — official self-check: text overflow, off-canvas
    elements, broken links, duplicate ids, morph collisions, chart config
    errors. Filter `findings` for `severity: "error"` first.
-2. `bento-mcp measure '{"html":"...","w":600,"fontSize":28}'` — size text
+2. `npx -y mcp-bento-server measure '{"html":"...","w":600,"fontSize":28}'` — size text
    BEFORE placing it so it never overflows.
 3. Ask the user about aesthetics — they see the live preview.
 
