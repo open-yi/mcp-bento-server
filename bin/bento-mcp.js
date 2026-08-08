@@ -28,7 +28,7 @@
 'use strict';
 
 const fs = require('fs');
-const { api, ensureServer, serverUp, startBackgroundServer, PORT } = require('../lib/client');
+const { api, ensureServer, serverUp, startBackgroundServer, maybeOpenBrowser, PORT } = require('../lib/client');
 
 // ------------------------------------------------------------- output helpers
 
@@ -69,6 +69,8 @@ async function main() {
       await srv.start();
       process.stdout.write(`Bento server listening on http://${HOST}:${port}/  (open this in your browser)\n`);
       process.stdout.write(`API base: http://${HOST}:${port}/api/\n`);
+      const { openBrowser } = require('../lib/client');
+      openBrowser();
       // keep alive
       setInterval(() => {}, 1 << 30);
       break;
@@ -100,6 +102,7 @@ async function main() {
       if (!file) err('usage: bento-mcp open <file.bento.html>');
       await ensureServer();
       out(await api('POST', '/api/open', { file }));
+      await maybeOpenBrowser();
       break;
     }
     case 'new': {
@@ -111,6 +114,7 @@ async function main() {
       if (!file) err('usage: bento-mcp new --title "..." --out <file.bento.html>');
       await ensureServer();
       out(await api('POST', '/api/new', { file, title }));
+      await maybeOpenBrowser();
       break;
     }
     case 'read': {
