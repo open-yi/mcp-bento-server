@@ -97,7 +97,11 @@ still overrides when you want a specific jump. Combine `goto` + `patch` for
 
 | Task | Command |
 |---|---|
-| Open / create | `bento-mcp open <file.bento.html>` · `bento-mcp new --title "X" --out f.bento.html` — both auto-open the browser |
+| Open / create | `bento-mcp open <file.bento.html>` · `bento-mcp new --title "X" --out f.bento.html --template <name>
+
+Pick a template from `bento-mcp templates` based on the user's topic:
+dark (tech/dev) · light (business/client) · gradient (launch/keynote) ·
+editorial (creative) · midnight (general default). Ask the user if unsure.` — both auto-open the browser |
 | Read | `bento-mcp read` · `bento-mcp slides` · `bento-mcp get <slide-id>` · `bento-mcp describe` |
 | Edit | `bento-mcp patch '<ops json>'` · `patch @ops.json` · `add-slide '<slide json>'` · `update-slide <id> '<set json>'` · `delete-slide <id>` · `duplicate-slide <id>` |
 | Style | `bento-mcp set-theme '{"background":"#101418"}'` · `bento-mcp set-title "..."` |
