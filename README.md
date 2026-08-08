@@ -1,6 +1,6 @@
 # mcp-bento-server
 
-<img src="images/demo.gif" width="100%" alt="mcp-bento-server live building demo"/>
+<video src="images/demo.mp4" width="100%" controls muted loop playsinline></video>
 
 **Local-first MCP server & CLI for authoring Bento decks (single-file PPT) with AI agents and live browser preview.**
 
