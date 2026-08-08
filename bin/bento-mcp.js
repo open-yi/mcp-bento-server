@@ -239,6 +239,13 @@ async function main() {
       await maybeOpenBrowser();
       break;
     }
+    case 'view': {
+      await ensureServer();
+      const r = await api('GET', '/api/view');
+      if (r && r.ok && r.view && r.view.text) process.stdout.write(r.view.text + '\n');
+      else out(r);
+      break;
+    }
     case 'validate': {
       await ensureServer();
       out(await api('GET', '/api/validate'));
